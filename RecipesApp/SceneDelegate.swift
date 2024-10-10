@@ -14,14 +14,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        
         guard let windowScene = scene as? UIWindowScene else { return }
         let window = UIWindow(windowScene: windowScene)
         
         // Crear las instancias necesarias
-        let recipeWorker = RecipeWorker() // Instancia del worker
+        let network = Network()
+        let recipeWorker = RecipeWorker(network: network) // Instancia del worker
         let interactor = RecipeListInteractor(recipeWorker: recipeWorker) // Instancia del interactor
         
         // Inicializar el RecipeListViewController sin el presentador inicialmente
@@ -33,11 +31,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Asignar el presentador a la vista
         recipeListVC.presenter = presenter
         
-        // Establecer RecipeListViewController como controlador raíz
-        window.rootViewController = recipeListVC
+        // Embebecer RecipeListViewController en un UINavigationController
+        let navigationController = UINavigationController(rootViewController: recipeListVC)
+        
+        // Establecer el NavigationController como controlador raíz
+        window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
     }
+
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

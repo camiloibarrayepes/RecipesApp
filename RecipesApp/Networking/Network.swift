@@ -15,29 +15,24 @@ enum NetworkError: Error {
 }
 
 class Network {
-    // Aseguramos que el inicializador sea accesible
     init() {}
 
-    // Método genérico para hacer solicitudes de red
-    func request<T: Decodable>(url: URL, completion: @escaping (Result<T, NetworkError>) -> Void) {
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                completion(.failure(.requestFailed(error)))
-                return
-            }
+    // Método genérico para hacer solicitudes de red utilizando async/await
+    func request<T: Decodable>(url: URL) async throws -> T {
+        let (data, response) = try await URLSession.shared.data(from: url)
 
-            guard let data = data else {
-                completion(.failure(.noData))
-                return
-            }
-
-            do {
-                let decodedData = try JSONDecoder().decode(T.self, from: data)
-                completion(.success(decodedData))
-            } catch {
-                completion(.failure(.decodingFailed(error)))
-            }
+        // Verifica el estado de la respuesta
+        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkError.requestFailed(NSError(domain: "InvalidResponse", code: 0, userInfo: nil))
         }
-        task.resume()
+
+        // Decodifica el JSON
+        do {
+            let decodedData = try JSONDecoder().decode(T.self, from: data)
+            return decodedData
+        } catch {
+            throw NetworkError.decodingFailed(error)
+        }
     }
 }
+

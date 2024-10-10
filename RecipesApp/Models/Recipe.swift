@@ -31,3 +31,8 @@ struct Recipe: Decodable {
     }
 }
 
+struct ShortRecipe {
+    let name: String
+    let cuisine: CuisineType
+    let photoUrlSmall: String?
+}

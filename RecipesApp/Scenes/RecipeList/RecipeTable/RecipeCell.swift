@@ -6,15 +6,18 @@
 //
 
 import UIKit
+import Kingfisher
 
 class RecipeCell: UITableViewCell {
     private let containerView = UIView() // Contenedor para la celda
     private let nameLabel = UILabel()
     private let cuisineLabel = UILabel()
     private let recipeImageView = UIImageView()
+    private let placeholderImage = UIImage(named: "placeholder") // Asegúrate de que la imagen de placeholder esté en tus assets
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         setupUI()
     }
 
@@ -23,15 +26,12 @@ class RecipeCell: UITableViewCell {
     }
     
     private func setupUI() {
-        // Configurar el contenedor
-        containerView.backgroundColor = UIColor(red: 173/255, green: 216/255, blue: 230/255, alpha: 1) // Azul pastel
         containerView.layer.cornerRadius = 8
-        containerView.clipsToBounds = true
-        
         // Configurar la imagen
         recipeImageView.contentMode = .scaleAspectFill
         recipeImageView.clipsToBounds = true
         recipeImageView.layer.cornerRadius = 8
+        recipeImageView.image = placeholderImage // Establecer el placeholder inicialmente
 
         // Crear el stack view
         let stackView = UIStackView(arrangedSubviews: [nameLabel, cuisineLabel])
@@ -63,34 +63,28 @@ class RecipeCell: UITableViewCell {
             stackView.trailingAnchor.constraint(equalTo: recipeImageView.leadingAnchor, constant: -10),
         ])
     }
-    
-    func configure(with recipe: Recipe) {
+
+    func configure(with recipe: ShortRecipe) {
+        // Configurar el nombre con tamaño de fuente más grande y en negrita
         nameLabel.text = recipe.name
-        cuisineLabel.text = recipe.cuisine
+        nameLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        nameLabel.textColor = .black
+        nameLabel.numberOfLines = 0
         
-        // Cargar la imagen de manera eficiente
+        // Configurar la cocina
+        cuisineLabel.text = recipe.cuisine.rawValue
+        
+        // Cambiar el color del contenedor según el tipo de cuisine
+        containerView.backgroundColor = recipe.cuisine.color
+        
+        // Cargar la imagen de manera eficiente usando Kingfisher
         if let photoUrl = recipe.photoUrlSmall, let url = URL(string: photoUrl) {
-            recipeImageView.loadImage(from: url)
+            recipeImageView.kf.setImage(with: url, placeholder: placeholderImage)
         } else {
-            recipeImageView.image = UIImage(named: "placeholder")
+            recipeImageView.image = placeholderImage // Mostrar placeholder si no hay URL
         }
     }
 }
 
-
-
-// Extensión para cargar imágenes de manera asincrónica
-extension UIImageView {
-    func loadImage(from url: URL) {
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: url) {
-                let image = UIImage(data: data)
-                DispatchQueue.main.async {
-                    self.image = image
-                }
-            }
-        }
-    }
-}
 
 

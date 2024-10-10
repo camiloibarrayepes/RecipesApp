@@ -15,6 +15,16 @@ class RecipeListInteractor {
     }
 
     func fetchRecipes(completion: @escaping (Result<[Recipe], RecipeWorkerError>) -> Void) {
-        recipeWorker.fetchRecipes(completion: completion)
+        Task {
+            do {
+                let recipes = try await recipeWorker.fetchRecipes()
+                completion(.success(recipes))
+            } catch let error as RecipeWorkerError {
+                completion(.failure(error))
+            } catch {
+                completion(.failure(.networkError(error as! NetworkError)))
+            }
+        }
     }
+
 }
