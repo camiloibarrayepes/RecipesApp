@@ -1,5 +1,7 @@
 # RecipesApp
 
+<img src="https://i.ibb.co/CBDChC0/DALL-E-2024-10-14-12-56-05-A-modern-and-vibrant-app-icon-for-a-recipe-application-featuring-a-styliz.png" alt="Recipe App Icon" width="120" height="120">
+
 **RecipesApp** is an iOS application that allows users to search and explore recipes. The app performs a `fetch` of recipes from an API, displays them in a user-friendly interface, and allows users to view the details of each recipe upon selection.
 
 ## Features
