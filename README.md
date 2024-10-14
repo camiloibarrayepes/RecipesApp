@@ -9,7 +9,6 @@
 - **Optimized Caching**: Implements an LRU (Least Recently Used) cache to improve performance.
 - **Image Loading**: Uses [Kingfisher](https://github.com/onevcat/Kingfisher) for efficient image loading and caching, imported via Swift Package Manager (version 8.0.3).
 - **Unit Testing**: Includes unit tests to ensure code quality.
-- **Testing Script**: A console script to easily run unit tests.
 - **VIP Architecture**: Implements VIP (View-Interactor-Presenter) architecture for better code organization.
 - **Async/Await and Actors**: Utilizes `async/await` for asynchronous handling and `actors` for safe concurrent access management.
 
@@ -36,6 +35,11 @@ To add it, go to File > Swift Packages > Add Package Dependency, and enter the f
 ## Usage
 1. Run the application: Select a simulator or a real device in Xcode and run the application.
 2. Explore Recipes: The app will display a list of recipes. You can select any recipe to see more details.
+
+## Testing
+   ```bash
+xcodebuild -scheme RecipesApp -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" test -only-testing:RecipesAppTests
+```
 
 ## Contributing
 
