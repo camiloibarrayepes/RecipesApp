@@ -30,9 +30,3 @@ struct Recipe: Decodable {
         case youtubeUrl = "youtube_url"
     }
 }
-
-struct ShortRecipe {
-    let name: String
-    let cuisine: CuisineType
-    let photoUrlSmall: String?
-}

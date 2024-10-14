@@ -5,34 +5,28 @@
 //  Created by Camilo Ibarra on 10/10/24.
 //
 
+import Foundation
 import UIKit
 
-enum CuisineType: String, CaseIterable {
-    case malaysian = "Malaysian"
-    case british = "British"
-    case italian = "Italian"
-    case american = "American"
-    case french = "French"
-    case canadian = "Canadian"
-    case tunisian = "Tunisian"
-
-    // Método para obtener un color asociado a cada tipo de cocina
-    var color: UIColor {
+extension String {
+    func colorForCuisine() -> UIColor {
         switch self {
-        case .malaysian:
-            return UIColor(red: 255/255, green: 223/255, blue: 186/255, alpha: 1) // Ejemplo de color
-        case .british:
-            return UIColor(red: 186/255, green: 255/255, blue: 213/255, alpha: 1) // Ejemplo de color
-        case .italian:
-            return UIColor(red: 224/255, green: 200/255, blue: 255/255, alpha: 1) // Ejemplo de color
-        case .american:
-            return UIColor(red: 200/255, green: 224/255, blue: 255/255, alpha: 1) // Ejemplo de color
-        case .french:
-            return UIColor(red: 255/255, green: 200/255, blue: 200/255, alpha: 1) // Ejemplo de color
-        case .canadian:
-            return UIColor(red: 255/255, green: 255/255, blue: 200/255, alpha: 1) // Ejemplo de color
-        case .tunisian:
-            return UIColor(red: 200/255, green: 255/255, blue: 200/255, alpha: 1) // Ejemplo de color
+        case "Malaysian":
+            return UIColor(red: 173/255, green: 124/255, blue: 47/255, alpha: 0.5) // Verde claro
+        case "British":
+            return UIColor(red: 70/255, green: 130/255, blue: 180/255, alpha: 0.5) // Azul acero
+        case "Italian":
+            return UIColor(red: 255/255, green: 69/255, blue: 0/255, alpha: 0.5) // Rojo tomate
+        case "American":
+            return UIColor(red: 30/255, green: 144/255, blue: 255/255, alpha: 0.5) // Azul Dodger
+        case "French":
+            return UIColor(red: 255/255, green: 182/255, blue: 193/255, alpha: 0.5) // Rosa claro
+        case "Canadian":
+            return UIColor(red: 34/255, green: 139/255, blue: 34/255, alpha: 0.5) // Verde bosque
+        case "Tunisian":
+            return UIColor(red: 255/255, green: 140/255, blue: 0/255, alpha: 0.5) // Naranja oscuro
+        default:
+            return UIColor(red: 173/255, green: 216/255, blue: 230/255, alpha: 0.5) // Azul pastel por defecto
         }
     }
 }

@@ -17,24 +17,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
         let window = UIWindow(windowScene: windowScene)
         
-        // Crear las instancias necesarias
+        // Create the necessary instances
         let network = Network()
-        let recipeWorker = RecipeWorker(network: network) // Instancia del worker
-        let interactor = RecipeListInteractor(recipeWorker: recipeWorker) // Instancia del interactor
-        
-        // Inicializar el RecipeListViewController sin el presentador inicialmente
-        let recipeListVC = RecipeListViewController(presenter: nil) // Crear la vista sin el presentador inicialmente
-        
-        // Inicializar el presentador pasando la vista y el interactor
+        let cache = LRUCache(capacity: 10)
+        let recipeWorker = RecipeWorker(network: network, cache: cache) // Instance of the worker
+        let interactor = RecipeListInteractor(recipeWorker: recipeWorker) // Instance of the interactor
+
+        // Initialize the RecipeListViewController without the presenter initially
+        let recipeListVC = RecipeListViewController(presenter: nil) // Create the view without the presenter initially
+
+        // Initialize the presenter by passing the view and the interactor
         let presenter = RecipeListPresenter(view: recipeListVC, interactor: interactor)
-        
-        // Asignar el presentador a la vista
+
+        // Assign the presenter to the view
         recipeListVC.presenter = presenter
-        
-        // Embebecer RecipeListViewController en un UINavigationController
+
+        // Embed RecipeListViewController in a UINavigationController
         let navigationController = UINavigationController(rootViewController: recipeListVC)
-        
-        // Establecer el NavigationController como controlador raíz
+
+        // Set the NavigationController as the root view controller
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()

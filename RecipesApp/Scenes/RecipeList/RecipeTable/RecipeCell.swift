@@ -9,11 +9,11 @@ import UIKit
 import Kingfisher
 
 class RecipeCell: UITableViewCell {
-    private let containerView = UIView() // Contenedor para la celda
+    private let containerView = UIView()
     private let nameLabel = UILabel()
     private let cuisineLabel = UILabel()
     private let recipeImageView = UIImageView()
-    private let placeholderImage = UIImage(named: "placeholder") // Asegúrate de que la imagen de placeholder esté en tus assets
+    private let placeholderImage = UIImage(named: "placeholder")
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,24 +27,24 @@ class RecipeCell: UITableViewCell {
     
     private func setupUI() {
         containerView.layer.cornerRadius = 8
-        // Configurar la imagen
+        // Setup the image
         recipeImageView.contentMode = .scaleAspectFill
         recipeImageView.clipsToBounds = true
         recipeImageView.layer.cornerRadius = 8
-        recipeImageView.image = placeholderImage // Establecer el placeholder inicialmente
+        recipeImageView.image = placeholderImage
 
-        // Crear el stack view
+        // Create the stackView
         let stackView = UIStackView(arrangedSubviews: [nameLabel, cuisineLabel])
         stackView.axis = .vertical
-        stackView.spacing = 4 // Espacio entre los textos
+        stackView.spacing = 4
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        // Añadir subviews
+        // Add subviews
         containerView.addSubview(recipeImageView)
         containerView.addSubview(stackView)
         contentView.addSubview(containerView)
         
-        // Configurar constraints
+        // Configure constraints
         containerView.translatesAutoresizingMaskIntoConstraints = false
         recipeImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -54,7 +54,7 @@ class RecipeCell: UITableViewCell {
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             
             recipeImageView.heightAnchor.constraint(equalToConstant: 80),
-            recipeImageView.widthAnchor.constraint(equalTo: recipeImageView.heightAnchor), // Hacer la imagen cuadrada
+            recipeImageView.widthAnchor.constraint(equalTo: recipeImageView.heightAnchor),
             recipeImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
             recipeImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 
@@ -64,24 +64,25 @@ class RecipeCell: UITableViewCell {
         ])
     }
 
-    func configure(with recipe: ShortRecipe) {
-        // Configurar el nombre con tamaño de fuente más grande y en negrita
+    func configure(with recipe: Recipe) {
+        // nameLabel properties
         nameLabel.text = recipe.name
         nameLabel.font = UIFont.boldSystemFont(ofSize: 22)
         nameLabel.textColor = .black
         nameLabel.numberOfLines = 0
         
-        // Configurar la cocina
-        cuisineLabel.text = recipe.cuisine.rawValue
+        cuisineLabel.text = recipe.cuisine
         
-        // Cambiar el color del contenedor según el tipo de cuisine
-        containerView.backgroundColor = recipe.cuisine.color
+        // Set color according cuisine type
+        if let cuisine = recipe.cuisine {
+            containerView.backgroundColor = cuisine.colorForCuisine()
+        }
         
-        // Cargar la imagen de manera eficiente usando Kingfisher
+        // Loading the image with Kingfisher
         if let photoUrl = recipe.photoUrlSmall, let url = URL(string: photoUrl) {
             recipeImageView.kf.setImage(with: url, placeholder: placeholderImage)
         } else {
-            recipeImageView.image = placeholderImage // Mostrar placeholder si no hay URL
+            recipeImageView.image = placeholderImage
         }
     }
 }

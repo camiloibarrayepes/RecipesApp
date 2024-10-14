@@ -7,11 +7,29 @@
 
 import Foundation
 
-enum NetworkError: Error {
+enum NetworkError: Error, Equatable {
     case invalidURL
     case requestFailed(Error)
     case noData
     case decodingFailed(Error)
+    case generic
+
+    static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidURL, .invalidURL):
+            return true
+        case (.noData, .noData):
+            return true
+        case (.generic, .generic):
+            return true
+        case let (.requestFailed(errorA), .requestFailed(errorB)):
+            return (errorA as NSError).domain == (errorB as NSError).domain && (errorA as NSError).code == (errorB as NSError).code
+        case let (.decodingFailed(errorA), .decodingFailed(errorB)):
+            return (errorA as NSError).domain == (errorB as NSError).domain && (errorA as NSError).code == (errorB as NSError).code
+        default:
+            return false
+        }
+    }
 }
 
 class Network {

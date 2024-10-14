@@ -14,25 +14,25 @@ enum RecipeWorkerError: Error {
 
 class RecipeWorker {
     private let network: Network
-    private var cache: LRUCache
-    
-    init(network: Network, cacheCapacity: Int = 10) {
+    private let cache: CacheProtocol
+
+    init(network: Network, cache: CacheProtocol) {
         self.network = network
-        self.cache = LRUCache(capacity: cacheCapacity)
+        self.cache = cache
     }
-    
+
     func fetchRecipes() async throws -> [Recipe] {
         let cacheKey = APIConstants.allRecipesEndpoint
-        
-        // Verificar si las recetas están en caché
-        if let cachedRecipes = cache.get(key: cacheKey) {
-            return cachedRecipes // Devolver recetas desde la caché
+
+        // check if the cache contains the recipes
+        if let cachedRecipes = await cache.get(key: cacheKey) {
+            return cachedRecipes
         }
-        
+
         let url = URL(string: cacheKey)!
         do {
             let recipes: RecipesResponse = try await network.request(url: url)
-            cache.put(key: cacheKey, value: recipes.recipes) // Almacenar recetas en caché
+            await cache.put(key: cacheKey, value: recipes.recipes) // save in cache
             return recipes.recipes
         } catch let networkError as NetworkError {
             throw RecipeWorkerError.networkError(networkError)
